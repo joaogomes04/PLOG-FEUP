@@ -1,18 +1,67 @@
 :- use_module(library(lists)).
+:- use_module(library(system)).
+:- include('logic.pl').
+:- include('utilities.pl').
+
+yavalath:-
+  gameModeMenu.
 
 
-board(['               ',' 1 ',' 2 ',' 3 ',' 4 ',' 5 '],
-      ['         ',' A ',s,s,s,s,s,' 6 '],
-      ['       ',' B ',s,s,s,s,s,s,' 7 '],
-      ['     ',' C ',s,s,s,s,s,s,s,' 8 '],
-      ['   ',' D ',s,s,s,s,s,s,s,s,' 9 '],
-      [' ',' E ',s,s,s,s,s,s,s,s,s],
-      ['   ',' F ',s,s,s,s,s,s,s,s],
-      ['     ',' G ',s,s,s,s,s,s,s],
-      ['       ',' H ',s,s,s,s,s,s],
-      ['         ',' I ',s,s,s,s,s]
-      ).
+printGameMenu:-
+  write('================================='), nl,
+	write('=            Yavalath           ='), nl,
+	write('================================='), nl,
+	write('=                               ='), nl,
+	write('=   1. Player vs. Player        ='), nl,
+	write('=   2. Player vs. Computer      ='), nl,
+	write('=   3. Computer vs. Computer    ='), nl,
+  write('=   4. Quit                     ='), nl,
+	write('=                               ='), nl,
+	write('================================='), nl,
+	write('Choose an option:'), nl.
 
+gameModeMenu:-
+  printGameMenu,
+  getChar(Input),
+	(
+		Input = '1' -> startPvPGame;
+		Input = '2' -> startPvMGame;
+		Input = '3' -> startMvMGame;
+		Input = '4';
+
+		nl,
+		write('Error: invalid input.'), nl,
+		pressEnterToContinue, nl,
+		gameModeMenu
+	).
+
+player(whiteP).
+player(blackP).
+
+
+translate(s, '   ').
+translate(w, ' o ').
+translate(b, ' x ').
+
+
+getPlayerName(whiteP, 'White').
+getPlayerName(blackP, 'Black').
+
+pieceOwnedBy(w, whiteP).
+pieceOwnedBy(b, blackP).
+
+startPvPGame:-
+	createPvPGame(Game),
+	playGame(Game).
+startPvMGame:-
+	createPvBGame(Game),
+	playGame(Game).
+startMvMGame:-
+	createBvBGame(Game),
+	playGame(Game).
+
+
+%deve estar no final deste file
 display_board([L1|Ls]):-
   display_line(L1), nl,
   display_board(Ls).
@@ -31,8 +80,3 @@ display_line([E|Es]):-
   display_line(Es).
 
 display_line([]).
-
-translate(s, '   ').
-%translate(e, '#').
-translate(w, ' o ').
-translate(b, ' x ').
