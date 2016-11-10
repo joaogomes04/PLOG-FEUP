@@ -6,6 +6,9 @@
 yavalath:-
   gameModeMenu.
 
+printBoard:-
+  initialBoard(Board),
+  display_board(Board).
 
 printGameMenu:-
   write('================================='), nl,
@@ -61,6 +64,32 @@ startMvMGame:-
 	playGame(Game).
 
 
+	
+createPvPGame(Game):-
+	initialBoard(Board),
+	Game = [Board,whitePlayer,pvp], !.
+	
+playGame(Game):-
+	printBoard.
+	
+switchPlayer(WhitePlayer, NewPlayer):-
+	NewPlayer=BlackPlayer.
+
+switchPlayer(BlackPlayer, NewPlayer):-
+	NewPlayer=WhitePlayer.
+
+	
+
+
+	
+
+
+
+
+
+
+
+
 %deve estar no final deste file
 display_board([L1|Ls]):-
   display_line(L1), nl,
@@ -80,3 +109,7 @@ display_line([E|Es]):-
   display_line(Es).
 
 display_line([]).
+
+
+%%%%%%%%%%%%%%%%%%%
+
