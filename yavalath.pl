@@ -66,22 +66,68 @@ startMvMGame:-
 
 	
 createPvPGame(Game):-
-	initialBoard(Board),
-	Game = [Board,whitePlayer,pvp], !.
+	testBoard(Board),
+	Game = [Board,whiteP,pvp], !.
 	
 playGame(Game):-
 	printBoard.
 	
-switchPlayer(WhitePlayer, NewPlayer):-
-	NewPlayer=BlackPlayer.
+%%%%%%%%%	
+changePlayer(Game,NewGame):-
+	getPlayerName(Game,Player),
+	(
+	     Player == whiteP ->
+			NextPlayer = blackP;
+		NextPlayer = whiteP
+	
+	),
+	setGamePlayerTurn(NextPlayer,Game,NewGame).
+	
+%%%%%%%
+find([],N) :-
+    write('There is no such element in the list'),nl.
 
-switchPlayer(BlackPlayer, NewPlayer):-
-	NewPlayer=WhitePlayer.
+
+find([Element|List],N, I,Result) :-
+	(N = I),
+	Result = Element;
+	(I1 is I+1,
+    find(List,N, I1,Result)).
+	
+findInBoard([Element|List],C,L,Result):-
+	find([Element|List],L,1,Linha),
+	(find(Linha,C,1,Result));
+	 (L1 is L-1,
+	 findInBoard(Element,L1,1,Linha)).
+	 
+	
+
+	
+
+%%%%%%%%%%5
+teste:-
+	testBoard(Board),
+	findInBoard(Board,5,4,Result),
+	write(Result).
+	
+	
+setGamePlayerTurn(Player, Game, NewGame):-
+		getListElemAt(1,Player,Game, NewGame).
+
+
+
+
+getPlayerTurn(Game,Player):-
+	getListElemAt(1,Game,Player).	
 
 	
 
 
-	
+getListElemAt(0, [ElemAtTheHead|_], ElemAtTheHead).
+getListElemAt(Pos, [_|RemainingElems], Elem):-
+	Pos > 0,
+	Pos1 is Pos-1,
+	getListElemAt(Pos1, RemainingElems, Elem).
 
 
 
