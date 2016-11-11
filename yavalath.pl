@@ -110,14 +110,22 @@ replace([X|Xs],N,Z,[X|Zs]):-
  
  %%%%%%
  
-% checkHorizontal(Board,Player,C,L,Counter):-
- %find(Board,C,1,Linha),
- %(
-	%find(Linha,)
+ checkHorizontal(Board,Player,C,L,Counter,Counter2):-
+ find(Board,L,1,Linha),
+ (	C1 is C+1,
+	find(Linha,C1,1,Piece),
+	(
+	Piece == w  -> 
+	(Counter1 is Counter+1,
+	Counter2 = Counter1,
+	checkHorizontal(Board,Player,C1,L,Counter2,Counter))
+	)	
+	
+	
  
  
- 
- %
+).
+
  
  
  %%%%%%Aqui o player vai servir para saber qual a peça a por
@@ -133,7 +141,8 @@ teste:-
 	testBoard(Board),
 	findInBoard(Board,5,4,Result),
 	putPiece(Board,Player,5,4,NewBoard),
-	display_board(NewBoard).
+	checkHorizontal(Board,Player,5,4,0,Counter1),
+	write(Counter1).
 	
 	%%%%%%%%%%%%%%%%
 setGamePlayerTurn(Player, Game, NewGame):-
