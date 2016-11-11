@@ -101,14 +101,25 @@ findInBoard([Element|List],C,L,Result):-
 	 findInBoard(Element,L1,1,Linha)).
 	 
 	
-
+replace([X|Xs],1,Z,[Z|Xs]).
+replace([X|Xs],N,Z,[X|Zs]):-
+ N1 is N-1,
+ replace(Xs,N1,Z,Zs).
+ 
+ 
+ 
+ putPiece(Board,Player,C,L,NewBoard):-
+ find(Board,C,1,Linha),
+ replace(Linha,L,w,NewBoard1),
+ replace(Board,C,NewBoard1,NewBoard).
 	
 
 %%%%%%%%%%5
 teste:-
 	testBoard(Board),
 	findInBoard(Board,5,4,Result),
-	write(Result).
+	putPiece(Board,Player,5,4,NewBoard),
+	display_board(NewBoard).
 	
 	
 setGamePlayerTurn(Player, Game, NewGame):-
