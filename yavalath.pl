@@ -87,12 +87,13 @@ changePlayer(Game,NewGame):-
 find([],N) :-
     write('There is no such element in the list'),nl.
 
-
+%%%%%%%%%%%%%
 find([Element|List],N, I,Result) :-
 	(N = I),
 	Result = Element;
 	(I1 is I+1,
     find(List,N, I1,Result)).
+	%%%%%%%%%%%
 	
 findInBoard([Element|List],C,L,Result):-
 	find([Element|List],L,1,Linha),
@@ -100,28 +101,41 @@ findInBoard([Element|List],C,L,Result):-
 	 (L1 is L-1,
 	 findInBoard(Element,L1,1,Linha)).
 	 
+%%%%%%%%
 	
 replace([X|Xs],1,Z,[Z|Xs]).
 replace([X|Xs],N,Z,[X|Zs]):-
  N1 is N-1,
  replace(Xs,N1,Z,Zs).
  
+ %%%%%%
  
+% checkHorizontal(Board,Player,C,L,Counter):-
+ %find(Board,C,1,Linha),
+ %(
+	%find(Linha,)
+ 
+ 
+ 
+ %
+ 
+ 
+ %%%%%%Aqui o player vai servir para saber qual a peça a por
  
  putPiece(Board,Player,C,L,NewBoard):-
- find(Board,C,1,Linha),
- replace(Linha,L,w,NewBoard1),
- replace(Board,C,NewBoard1,NewBoard).
+ find(Board,L,1,Linha),
+ replace(Linha,C,w,NewBoard1),
+ replace(Board,L,NewBoard1,NewBoard).
 	
 
-%%%%%%%%%%5
+%%%%%%%%%%para testar as funçoes
 teste:-
 	testBoard(Board),
 	findInBoard(Board,5,4,Result),
 	putPiece(Board,Player,5,4,NewBoard),
 	display_board(NewBoard).
 	
-	
+	%%%%%%%%%%%%%%%%
 setGamePlayerTurn(Player, Game, NewGame):-
 		getListElemAt(1,Player,Game, NewGame).
 
