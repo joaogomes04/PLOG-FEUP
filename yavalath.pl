@@ -66,11 +66,19 @@ startMvMGame:-
 
 	
 createPvPGame(Game):-
-	testBoard(Board),
+	iBoard(Board),
 	Game = [Board,whiteP,pvp], !.
 	
 playGame(Game):-
-	printBoard.
+		getBoard(Game,Board),
+		displayBoard(Board),
+		(write('Choose the line'),nl,
+		getCode(Line),
+		write('Choose the collumn'),nl,
+		getInt(Colum),
+		putPiece(Board,'w',Colum,Line,NewBoard),
+		displayBoard(NewBoard)),!.
+	
 	
 %%%%%%%%%	
 changePlayer(Game,NewGame):-
@@ -83,6 +91,14 @@ changePlayer(Game,NewGame):-
 	),
 	setGamePlayerTurn(NextPlayer,Game,NewGame).
 	
+	
+	
+	
+	
+	
+	
+	
+	%%%%%%
 %%%%%%%
 find([],N) :-
     write('There is no such element in the list'),nl.
@@ -110,23 +126,44 @@ replace([X|Xs],N,Z,[X|Zs]):-
  
  %%%%%%
  
- checkHorizontal(Board,Player,C,L,Counter,Counter2):-
+ checkHorizontal(Board,PlayerPiece,C,L,Result):-
+ checkHorizontal(Board,PlayerPiece,C,L,0,Result).
+ 
+ 
+ 
+ %%%%%% Counter = 3 -> derrota, Counter = 4 ->vitoria
+ checkHorizontal(Board,PlayerPiece,C,L,Counter,Result):-
  find(Board,L,1,Linha),
- (	C1 is C+1,
-	find(Linha,C1,1,Piece),
-	(
-	Piece == w  -> 
-	(Counter1 is Counter+1,
-	Counter2 = Counter1,
-	checkHorizontal(Board,Player,C1,L,Counter2,Counter))
-	)	
-	
-	
- 
- 
-).
 
- 
+ ( checkHorizontalFront(Linha,PlayerPiece,C,Counter),
+    (Counter == 2 ) -> Result = 'perdeu'; ((Counter == 3) -> Result = 'ganhou'; Result = ' ')
+	).
+	
+checkHorizontalBack(Board,PlayerPiece,C):-
+checkHorizontalBack(Board,PlayerPiece,C,0).
+
+
+checkHorizontalBack(Linha,PlayerPiece,C,Counter):-
+	C1 is C-1,
+	find(Linha,C1,1,Piece),
+	Piece == PlayerPiece ->(
+	Counter1 is Counter+1,
+	checkHorizontalBack(Linha,PlayerPiece,C1,Counter1)).
+
+	%%%%%
+
+checkHorizontalFront(Board,PlayerPiece,C):-
+checkHorizontalFront(Board,PlayerPiece,C,0).
+
+
+checkHorizontalFront(Linha,PlayerPiece,C,Counter):-
+	C1 is C+1,
+	find(Linha,C1,1,Piece),
+	((Piece == PlayerPiece )->(
+	Counter1 is Counter+1,
+	checkHorizontalFront(Linha,PlayerPiece,C1,Counter1));
+	Counter = Counter).
+	
  
  %%%%%%Aqui o player vai servir para saber qual a peça a por
  
@@ -139,8 +176,17 @@ replace([X|Xs],N,Z,[X|Zs]):-
 %%%%%%%%%%para testar as funçoes
 teste:-
 	testBoard(Board),
-	arrangeBoard(Board,NewBoard),
-	display_board(NewBoard).
+	displayBoard(Board),
+	putPiece(Board,w,1,1,NewBoard),
+	displayBoard(NewBoard).
+	
+	%%%%%
+	teste1:-
+	testBoard(Board),
+	checkHorizontal(Board,w,4,5,0,Result),
+	write(Result).
+	
+	
 	
 	%%%%%%%%%%%%%%%%
 setGamePlayerTurn(Player, Game, NewGame):-
@@ -152,7 +198,8 @@ setGamePlayerTurn(Player, Game, NewGame):-
 getPlayerTurn(Game,Player):-
 	getListElemAt(1,Game,Player).	
 
-	
+getBoard(Game, Board):-
+	getListElemAt(0,Game,Board).
 
 
 getListElemAt(0, [ElemAtTheHead|_], ElemAtTheHead).

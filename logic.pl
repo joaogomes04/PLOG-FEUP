@@ -22,20 +22,30 @@ initialBoard([['               ',' 1 ',' 2 ',' 3 ',' 4 ',' 5 '],
       [s,s,s,s,s,s],
       [s,s,s,s,s,s,s],
       [s,s,s,s,w,w,s,s],
-      [s,s,s,w,w,s,s,s,s],
+      [s,s,s,w,w,w,w,s,s],
       [s,s,s,s,b,s,s,s],
       [s,s,s,s,s,s,s],
       [s,s,s,s,s,s],
       [s,s,s,s,s]
       ]	).
 
-
+		iBoard([
+      [s,s,s,s,s],
+      [s,s,s,s,s,s],
+      [s,s,s,s,s,s,s],
+      [s,s,s,s,w,w,s,s],
+      [s,s,s,w,w,w,w,s,s],
+      [s,s,s,s,b,s,s,s],
+      [s,s,s,s,s,s,s],
+      [s,s,s,s,s,s],
+      [s,s,s,s,s]
+      ]	).
 	  
 	ins(Val,[H|List],Pos,[H|Res]):- 
 	Pos > 1, !, 
     Pos1 is Pos - 1, ins(Val,List,Pos1,Res). 
 	
-       ins(Val, List, 1, [Val|List]).
+     ins(Val, List, 1, [Val|List]).
 
 	   
 	   
@@ -46,12 +56,12 @@ initialBoard([['               ',' 1 ',' 2 ',' 3 ',' 4 ',' 5 '],
 		replace(Board,Line,NovaLinha,NewBoard).
 	   
 	   
-	   concatenate([],List,List).
+	 concatenate([],List,List).
     
     concatenate([X|List1],List2,[X|List3]) :-
         concatenate(List1,List2,List3).
 		
-	 arrangeBoard(Board,FinalBoard):- 
+	 displayBoard(Board):- 
 	 arrangeLine(Board,1,['         ',' A '],[' 6 '],FinalBoard1),
 	 arrangeLine(FinalBoard1,2,['       ',' B '],[' 7 '],FinalBoard2),
 	 arrangeLine(FinalBoard2,3,['     ',' C '],[' 8 '],FinalBoard3),
@@ -61,7 +71,8 @@ initialBoard([['               ',' 1 ',' 2 ',' 3 ',' 4 ',' 5 '],
 	 arrangeLine(FinalBoard6,7,['     ',' G '],[],FinalBoard7),
 	 arrangeLine(FinalBoard7,8,['       ',' H '],[],FinalBoard8),
 	 arrangeLine(FinalBoard8,9,['         ',' I '],[],FinalBoard9),
-	 ins(['               ',' 1 ',' 2 ',' 3 ',' 4 ',' 5 '],FinalBoard9,1,FinalBoard).
+	 ins(['               ',' 1 ',' 2 ',' 3 ',' 4 ',' 5 '],FinalBoard9,1,FinalBoard),
+	 display_board(FinalBoard).
 	 
 	 
 %canMovePiece(Board, Letter, Number)
