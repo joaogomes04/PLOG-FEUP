@@ -130,19 +130,17 @@ replace([X|Xs],N,Z,[X|Zs]):-
  
  %%%%%%Aqui o player vai servir para saber qual a peça a por
  
- putPiece(Board,Player,C,L,NewBoard):-
+ putPiece(Board,Piece,C,L,NewBoard):-
  find(Board,L,1,Linha),
- replace(Linha,C,w,NewBoard1),
+ replace(Linha,C,Piece,NewBoard1),
  replace(Board,L,NewBoard1,NewBoard).
 	
 
 %%%%%%%%%%para testar as funçoes
 teste:-
 	testBoard(Board),
-	findInBoard(Board,5,4,Result),
-	putPiece(Board,Player,5,4,NewBoard),
-	checkHorizontal(Board,Player,5,4,0,Counter1),
-	write(Counter1).
+	arrangeBoard(Board,NewBoard),
+	display_board(NewBoard).
 	
 	%%%%%%%%%%%%%%%%
 setGamePlayerTurn(Player, Game, NewGame):-
