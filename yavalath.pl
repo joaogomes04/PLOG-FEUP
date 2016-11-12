@@ -126,43 +126,43 @@ replace([X|Xs],N,Z,[X|Zs]):-
  
  %%%%%%
  
- checkHorizontal(Board,PlayerPiece,C,L,Result):-
- checkHorizontal(Board,PlayerPiece,C,L,0,Result).
+
  
  
  
- %%%%%% Counter = 3 -> derrota, Counter = 4 ->vitoria
- checkHorizontal(Board,PlayerPiece,C,L,Counter,Result):-
+ %%%%%% C tem de ir a 1 pq basicamente ele testa a linha toda desde a primira celula ate ao fim 
+ checkHorizontalLose(Board,PlayerPiece,C,L,Result):-
  find(Board,L,1,Linha),
+ C < 10 ->
+ (checkHorizontalFront(Linha,PlayerPiece,C,3)-> Result = 'lose';(
+	C1 is C+1,
+   checkHorizontalLose(Board,PlayerPiece,C1,L,Result)));
+   Result = 'play'.
 
- ( checkHorizontalFront(Linha,PlayerPiece,C,Counter),
-    (Counter == 2 ) -> Result = 'perdeu'; ((Counter == 3) -> Result = 'ganhou'; Result = ' ')
-	).
+  
+%%%%%%%%
+
+checkHorizontalWin(Board,PlayerPiece,C,L,Result):-
+  find(Board,L,1,Linha),
+ C < 10 ->
+ (checkHorizontalFront(Linha,PlayerPiece,C,4)-> Result = 'win';(
+	C1 is C+1,
+   checkHorizontalWin(Board,PlayerPiece,C1,L,Result)));
+   checkHorizontalLose(Board,w,0,L,Result).
+
 	
-checkHorizontalBack(Board,PlayerPiece,C):-
-checkHorizontalBack(Board,PlayerPiece,C,0).
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+	%%%%% N = numero de peças seguidas
+checkHorizontalFront(Linha,PlayerPiece,C,N):-
+checkHorizontalFront(Linha,PlayerPiece,C,N,0).
 
-checkHorizontalBack(Linha,PlayerPiece,C,Counter):-
-	C1 is C-1,
-	find(Linha,C1,1,Piece),
-	Piece == PlayerPiece ->(
-	Counter1 is Counter+1,
-	checkHorizontalBack(Linha,PlayerPiece,C1,Counter1)).
-
-	%%%%%
-
-checkHorizontalFront(Board,PlayerPiece,C):-
-checkHorizontalFront(Board,PlayerPiece,C,0).
-
-
-checkHorizontalFront(Linha,PlayerPiece,C,Counter):-
+checkHorizontalFront(Linha,PlayerPiece,C,N,Counter):-
 	C1 is C+1,
 	find(Linha,C1,1,Piece),
-	((Piece == PlayerPiece )->(
+	(Piece == PlayerPiece )->(
 	Counter1 is Counter+1,
-	checkHorizontalFront(Linha,PlayerPiece,C1,Counter1));
-	Counter = Counter).
+	checkHorizontalFront(Linha,PlayerPiece,C1,N,Counter1));Counter == N.
 	
  
  %%%%%%Aqui o player vai servir para saber qual a peça a por
@@ -183,8 +183,36 @@ teste:-
 	%%%%%
 	teste1:-
 	testBoard(Board),
-	checkHorizontal(Board,w,4,5,0,Result),
+	putPiece(Board,w,6,5,NewBoard),
+	checkHorizontalWin(NewBoard,w,0,5,Result),
+	
 	write(Result).
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
