@@ -37,8 +37,9 @@ printGameMenu:-
   		Input = '1' -> explain, gameModeMenu;
   		Input = '2' -> startHvHGame;
   		Input = '3' -> startHvCGame;
-      Input = '4' -> startHvSCGame;
+        Input = '4' -> startHvSCGame;
   		Input = '5';
+		Input = '6' ->startSCvSCGame;
 
   		nl,
   		write('Error: invalid input.'), nl,
@@ -64,7 +65,7 @@ explain:-
   write('---------------------------------------------------'), nl, nl, nl.
 
 % --- Display predicates ---
-padding(['    ', '    ', '  ', '  ', '', '  ', '  ', '    ', '    ']).
+padding(['A    ', 'B    ', 'C  ', 'D  ', 'E', 'F  ', 'G  ', 'H    ', 'I    ']).
 
 displayBoard([], []).
 displayBoard([L|R], [A|B]) :-
@@ -132,6 +133,7 @@ switch('o', 'x').
 startHvHGame  :- init(Board), playloopHH('x', Board).
 startHvCGame  :- init(Board), playloopHC('x', Board, randomplayer).
 startHvSCGame :- init(Board), playloopHC('x', Board, smartrandomplayer).
+startSCvSCGame :- init(Board), playloopCC('x', Board, smartrandomplayer).
 
 % --- Computer Interaction ---
 freecells(Board, [X, Y]) :-
@@ -187,10 +189,10 @@ humanplayer(P, Board, NewBoard) :-
   humanplayer(P, Board, NewBoard).
 
 % --- Main Game Loop ---
-playloopHH(_, Board) :- haswon('x', Board), padding(Pad), displayBoard(Board, Pad),nl, write('white won!!'),  nl.
-playloopHH(_, Board) :- haswon('o', Board), padding(Pad), displayBoard(Board, Pad),nl, write('black won!!'),  nl.
-playloopHH(_, Board) :- haslost('x', Board), padding(Pad), displayBoard(Board, Pad),nl, write('white lost!!'), nl.
-playloopHH(_, Board) :- haslost('o', Board), padding(Pad), displayBoard(Board, Pad),nl, write('black lost!!'), nl.
+playloopHH(_, Board) :- haswon('x', Board), padding(Pad), displayBoard(Board, Pad),nl, write('White won!!'),  nl.
+playloopHH(_, Board) :- haswon('o', Board), padding(Pad), displayBoard(Board, Pad),nl, write('Black won!!'),  nl.
+playloopHH(_, Board) :- haslost('x', Board), padding(Pad), displayBoard(Board, Pad),nl, write('White lost!!'), nl.
+playloopHH(_, Board) :- haslost('o', Board), padding(Pad), displayBoard(Board, Pad),nl, write('Black lost!!'), nl.
 
 playloopHH(Player, Board) :-
   humanplayer(Player, Board, B1),
@@ -198,10 +200,10 @@ playloopHH(Player, Board) :-
   playloopHH(NewPlayer, B1).
 
 % ---- Human vs Computer Loop ----
-playloopHC(_, Board, _) :- haswon('x', Board),  write('player has won!!'), nl.
-playloopHC(_, Board, _) :- haswon('o', Board),  write('computer has won!!'), nl.
-playloopHC(_, Board, _) :- haslost('x', Board), write('player has lost!!'), nl.
-playloopHC(_, Board, _) :- haslost('o', Board), write('computer has lost!!'), nl.
+playloopHC(_, Board, _) :- haswon('x', Board),  write('Player has won!!'), nl.
+playloopHC(_, Board, _) :- haswon('o', Board),  write('Computer has won!!'), nl.
+playloopHC(_, Board, _) :- haslost('x', Board), write('Player has lost!!'), nl.
+playloopHC(_, Board, _) :- haslost('o', Board), write('Computer has lost!!'), nl.
 
 playloopHC('o', Board, Strategy) :-
   call(Strategy, 'o', Board, B1), !,
@@ -210,6 +212,38 @@ playloopHC('o', Board, Strategy) :-
 playloopHC('x', Board, Strategy) :-
   humanplayer('x', Board, B1), !,
   playloopHC('o', B1, Strategy).
+  
+ %------- Computer vs Computer Loop --------
+playloopCC(_, Board, _) :- haswon('x', Board),  write('Computer1 has won!!'), nl.
+playloopCC(_, Board, _) :- haswon('o', Board),  write('Computer2 has won!!'), nl.
+playloopCC(_, Board, _) :- haslost('x', Board), write('Computer1 has lost!!'), nl.
+playloopCC(_, Board, _) :- haslost('o', Board), write('Computer2 has lost!!'), nl.
+ 
+ 
+playloopCC('o', Board, Strategy) :-
+  pressEnterToContinue, 
+  call(Strategy, 'o', Board, B1),
+  padding(Pad),
+  displayBoard(B1, Pad),
+  nl,
+  write('Computer2 just playing!'),
+  nl,
+  !,
+  playloopCC('x', B1, Strategy).
+  
+playloopCC('x', Board, Strategy) :-
+  pressEnterToContinue,  
+  call(Strategy, 'x', Board, B1),
+  padding(Pad),
+  displayBoard(B1, Pad),
+  nl,
+  write('Computer1 just playing!'),
+  nl,
+ !,
+  playloopCC('o', B1, Strategy).
+
+
+
 
 start:-
   gameModeMenu.

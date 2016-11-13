@@ -23,3 +23,10 @@ getCode(Input):-
 getInt(Input):-
 	get_code(TempInput),
 	Input is TempInput - 49.
+
+	pressEnterToContinue:-
+	write('Press <Enter> to continue.'), nl,
+	waitForEnter, !.
+
+waitForEnter:-
+	get_char(_).
