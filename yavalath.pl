@@ -25,7 +25,7 @@ printGameMenu:-
 	write('-     2. Player vs. Player          -'), nl,
 	write('-     3. Player vs. Random Computer -'), nl,
   write('-     4. Player vs. Smart Computer  -'), nl,
-  write('-     5. Quit                       -'), nl,
+  write('-     6. Quit                       -'), nl,
 	write('-                                   -'), nl,
 	write('-------------------------------------'), nl,
 	write('Choose an option:'), nl.
@@ -38,8 +38,9 @@ printGameMenu:-
   		Input = '2' -> startHvHGame;
   		Input = '3' -> startHvCGame;
         Input = '4' -> startHvSCGame;
-  		Input = '5';
-		Input = '6' ->startSCvSCGame;
+		Input = '5' ->startSCvSCGame;
+  		Input = '6';
+		
 
   		nl,
   		write('Error: invalid input.'), nl,
