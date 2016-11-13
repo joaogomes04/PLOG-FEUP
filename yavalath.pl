@@ -127,6 +127,9 @@ move(Player, Board, X, Y, NewBoard) :-
 movmessage('x', 'white to move: ').
 movmessage('o', 'black to move: ').
 
+computermessage('x', 'Computer1 just playing ').
+computermessage('o', 'Computer2 just playing ').
+
 switch('x', 'o').
 switch('o', 'x').
 
@@ -222,29 +225,16 @@ playloopCC(_, Board, _) :- haslost('x', Board), write('Computer1 has lost!!'), n
 playloopCC(_, Board, _) :- haslost('o', Board), write('Computer2 has lost!!'), nl.
 
 
-playloopCC('o', Board, Strategy) :-
+playloopCC(P, Board, Strategy) :-
   pressEnterToContinue,
-  call(Strategy, 'o', Board, B1),
+  call(Strategy, P, Board, B1),
   padding(Pad),
   displayBoard(B1, Pad),
   nl,
-  write('Computer2 just playing!'),
-  nl,
-  !,
-  playloopCC('x', B1, Strategy).
-
-playloopCC('x', Board, Strategy) :-
-  pressEnterToContinue,
-  call(Strategy, 'x', Board, B1),
-  padding(Pad),
-  displayBoard(B1, Pad),
-  nl,
-  write('Computer1 just playing!'),
-  nl,
- !,
-  playloopCC('o', B1, Strategy).
-
-
+  computermessage(P,M),write(M),
+  nl,!,
+  switch(P,P1),
+  playloopCC(P1, B1, Strategy).
 
 
 start:-
