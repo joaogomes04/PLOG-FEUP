@@ -30,20 +30,20 @@ printGameMenu:-
 	write('-------------------------------------'), nl,
 	write('Choose an option:'), nl.
 
-  gameModeMenu:-
-    printGameMenu,
-    getChar(Input),
-  	(
-  		Input = '1' -> explain, gameModeMenu;
-  		Input = '2' -> startHvHGame;
-  		Input = '3' -> startHvCGame;
-      Input = '4' -> startHvSCGame;
-  		Input = '5';
+gameModeMenu :-
+  printGameMenu,
+  getChar(Input),
+	(
+		Input = '1' -> explain, gameModeMenu;
+		Input = '2' -> startHvHGame;
+		Input = '3' -> startHvCGame;
+    Input = '4' -> startHvSCGame;
+		Input = '5';
 
-  		nl,
-  		write('Error: invalid input.'), nl,
-  		gameModeMenu
-  	).
+		nl,
+		write('Error: invalid input.'), nl,
+		gameModeMenu
+	).
 
 % --- Explanation for the Human User ---
 explain:-
@@ -87,10 +87,7 @@ endgame(Pattern, Board) :- search(Pattern, Board).
 endgame(Pattern, Board) :- rotate60(Board, Board60), search(Pattern, Board60).
 endgame(Pattern, Board) :- rotate120(Board, Board120), search(Pattern, Board120).
 
-search(Pattern, Board) :- member(Row, Board), sublist(Pattern, Row).
-
-sublist(X, Y) :- prefix(Y, X), !.
-sublist(X, [_|YS]) :- sublist(X, YS).
+search(Pattern, Board) :- member(Row, Board), segment(Row, Pattern).
 
 rotate60([[_,  _,  A3, A4, A5, A6, A7, _,  _ ],
           [_,  B2, B3, B4, B5, B6, B7, _,  _ ],
