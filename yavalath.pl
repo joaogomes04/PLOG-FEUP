@@ -41,7 +41,7 @@ printGameMenu:-
         Input = '4' -> startHvSCGame;
 		Input = '5' ->startSCvSCGame;
   		Input = '6';
-		
+
 
   		nl,
   		write('Error: invalid input.'), nl,
@@ -67,7 +67,7 @@ explain:-
   write('---------------------------------------------------'), nl, nl, nl.
 
 % --- Display predicates ---
-padding(['A    ', 'B    ', 'C  ', 'D  ', 'E', 'F  ', 'G  ', 'H    ', 'I    ']).
+padding(['A      ', 'B      ', 'C    ', 'D    ', 'E  ', 'F    ', 'G    ', 'H      ', 'I      ']).
 
 displayBoard([], []).
 displayBoard([L|R], [A|B]) :-
@@ -214,16 +214,16 @@ playloopHC('o', Board, Strategy) :-
 playloopHC('x', Board, Strategy) :-
   humanplayer('x', Board, B1), !,
   playloopHC('o', B1, Strategy).
-  
+
  %------- Computer vs Computer Loop --------
 playloopCC(_, Board, _) :- haswon('x', Board),  write('Computer1 has won!!'), nl.
 playloopCC(_, Board, _) :- haswon('o', Board),  write('Computer2 has won!!'), nl.
 playloopCC(_, Board, _) :- haslost('x', Board), write('Computer1 has lost!!'), nl.
 playloopCC(_, Board, _) :- haslost('o', Board), write('Computer2 has lost!!'), nl.
- 
- 
+
+
 playloopCC('o', Board, Strategy) :-
-  pressEnterToContinue, 
+  pressEnterToContinue,
   call(Strategy, 'o', Board, B1),
   padding(Pad),
   displayBoard(B1, Pad),
@@ -232,9 +232,9 @@ playloopCC('o', Board, Strategy) :-
   nl,
   !,
   playloopCC('x', B1, Strategy).
-  
+
 playloopCC('x', Board, Strategy) :-
-  pressEnterToContinue,  
+  pressEnterToContinue,
   call(Strategy, 'x', Board, B1),
   padding(Pad),
   displayBoard(B1, Pad),
