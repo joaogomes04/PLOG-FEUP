@@ -2,7 +2,8 @@
 :- use_module(library(random)).
 :- include('utilities.pl').
 
-% --- Initialize board ---
+% -----Initialize Board --------
+
 init([['#', '#', ' ', ' ', ' ', ' ', ' ', '#', '#'],
       ['#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#'],
       ['#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'],
@@ -186,10 +187,10 @@ humanplayer(P, Board, NewBoard) :-
   humanplayer(P, Board, NewBoard).
 
 % --- Main Game Loop ---
-playloopHH(_, Board) :- haswon('x', Board),  write('white won!!'),  nl.
-playloopHH(_, Board) :- haswon('o', Board),  write('black won!!'),  nl.
-playloopHH(_, Board) :- haslost('x', Board), write('white lost!!'), nl.
-playloopHH(_, Board) :- haslost('o', Board), write('black lost!!'), nl.
+playloopHH(_, Board) :- haswon('x', Board), padding(Pad), displayBoard(Board, Pad),nl, write('white won!!'),  nl.
+playloopHH(_, Board) :- haswon('o', Board), padding(Pad), displayBoard(Board, Pad),nl, write('black won!!'),  nl.
+playloopHH(_, Board) :- haslost('x', Board), padding(Pad), displayBoard(Board, Pad),nl, write('white lost!!'), nl.
+playloopHH(_, Board) :- haslost('o', Board), padding(Pad), displayBoard(Board, Pad),nl, write('black lost!!'), nl.
 
 playloopHH(Player, Board) :-
   humanplayer(Player, Board, B1),
