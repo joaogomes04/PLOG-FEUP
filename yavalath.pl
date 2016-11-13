@@ -2,20 +2,31 @@
 :- use_module(library(random)).
 :- include('utilities.pl').
 
+% --- Initialize board ---
+init([['#', '#', ' ', ' ', ' ', ' ', ' ', '#', '#'],
+      ['#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#'],
+      ['#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'],
+      ['#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#'],
+      ['#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#'],
+      ['#', '#', ' ', ' ', ' ', ' ', ' ', '#', '#']]).
+
 % --- Game Menu ---
 printGameMenu:-
-  write('---------------------------------'), nl,
-	write('-            Yavalath           -'), nl,
-	write('---------------------------------'), nl,
-	write('-                               -'), nl,
-  write('-   > 1. How to Play            -'), nl,
-  write('-   > Game Mode:                -'), nl,
-	write('-     2. Player vs. Player      -'), nl,
-	write('-     3. Player vs. Computer    -'), nl,
-	write('-     4. Computer vs. Computer  -'), nl,
-  write('-     5. Quit                   -'), nl,
-	write('-                               -'), nl,
-	write('---------------------------------'), nl,
+  write('-------------------------------------'), nl,
+	write('-            Yavalath               -'), nl,
+	write('-------------------------------------'), nl,
+	write('-                                   -'), nl,
+  write('-   > 1. How to Play                -'), nl,
+  write('-   > Game Mode:                    -'), nl,
+	write('-     2. Player vs. Player          -'), nl,
+	write('-     3. Player vs. Random Computer -'), nl,
+  write('-     4. Player vs. Smart Computer  -'), nl,
+  write('-     5. Quit                       -'), nl,
+	write('-                                   -'), nl,
+	write('-------------------------------------'), nl,
 	write('Choose an option:'), nl.
 
   gameModeMenu:-
@@ -25,8 +36,8 @@ printGameMenu:-
   		Input = '1' -> explain, gameModeMenu;
   		Input = '2' -> startHvHGame;
   		Input = '3' -> startHvCGame;
-  		Input = '4' -> startCvCGame;
-      Input = '5';
+      Input = '4' -> startHvSCGame;
+  		Input = '5';
 
   		nl,
   		write('Error: invalid input.'), nl,
@@ -117,9 +128,9 @@ switch('o', 'x').
 
 % --- Game Modes ---
 
-startHvHGame :- init(Board), playloopHH('x', Board).
-startHvCGame :- init(Board), playloopHC('x', Board).
-startCvCGame :- nl.
+startHvHGame  :- init(Board), playloopHH('x', Board).
+startHvCGame  :- init(Board), playloopHC('x', Board, randomplayer).
+startHvSCGame :- init(Board), playloopHC('x', Board, smartrandomplayer).
 
 % --- Computer Interaction ---
 freecells(Board, [X, Y]) :-
@@ -133,6 +144,33 @@ randomplay(Board, X, Y) :-
 randomplayer(P, Board, NewBoard) :-
   randomplay(Board, X, Y),
   move(P, Board, X, Y, NewBoard).
+
+% Win positions
+winpositions(P, Board, [X, Y]) :-
+  freecells(Board, [X, Y]),
+  move(P, Board, X, Y, NewBoard),
+  haswon(P, NewBoard).
+
+% Non-lost positions
+nonlostpositions(P, Board, [X, Y]) :-
+  freecells(Board, [X, Y]),
+  move(P, Board, X, Y, NewBoard),
+  \+ haslost(P, NewBoard),
+  switch(P, P2),
+  \+ winpositions(P2, NewBoard, _).
+
+smartrandomplayer(P, Board, NewBoard) :-
+  setof(C, winpositions(P, Board, C), L),
+  random_member([X, Y], L),
+  move(P, Board, X, Y, NewBoard).
+
+smartrandomplayer(P, Board, NewBoard) :-
+  setof(C, nonlostpositions(P, Board, C), L),
+  random_member([X, Y], L),
+  move(P, Board, X, Y, NewBoard).
+
+smartrandomplayer(P, Board, NewBoard) :-
+  randomplayer(P, Board, NewBoard).
 
 % --- Human Player Interaction ---
 humanplayer(P, Board, NewBoard) :-
@@ -158,18 +196,19 @@ playloopHH(Player, Board) :-
   switch(Player, NewPlayer), !,
   playloopHH(NewPlayer, B1).
 
-playloopHC(_, Board) :- haswon('x', Board),  write('player has won!!'), nl.
-playloopHC(_, Board) :- haswon('o', Board),  write('computer has won!!'), nl.
-playloopHC(_, Board) :- haslost('x', Board), write('player has lost!!'), nl.
-playloopHC(_, Board) :- haslost('o', Board), write('computer has lost!!'), nl.
+% ---- Human vs Computer Loop ----
+playloopHC(_, Board, _) :- haswon('x', Board),  write('player has won!!'), nl.
+playloopHC(_, Board, _) :- haswon('o', Board),  write('computer has won!!'), nl.
+playloopHC(_, Board, _) :- haslost('x', Board), write('player has lost!!'), nl.
+playloopHC(_, Board, _) :- haslost('o', Board), write('computer has lost!!'), nl.
 
-playloopHC('o', Board) :-
-  randomplayer('o', Board, B1), !,
-  playloopHC('x', B1).
+playloopHC('o', Board, Strategy) :-
+  call(Strategy, 'o', Board, B1), !,
+  playloopHC('x', B1, Strategy).
 
-playloopHC('x', Board) :-
+playloopHC('x', Board, Strategy) :-
   humanplayer('x', Board, B1), !,
-  playloopHC('o', B1).
+  playloopHC('o', B1, Strategy).
 
 start:-
   gameModeMenu.
