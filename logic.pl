@@ -18,7 +18,7 @@ initialBoard([['               ',' 1 ',' 2 ',' 3 ',' 4 ',' 5 '],
 
 	  
 	  testBoard([
-      [s,s,s,s,s],
+      [w,w,w,w,w],
       [s,s,s,s,s,s],
       [s,s,s,s,s,s,s],
       [s,s,s,s,w,w,s,s],
@@ -30,11 +30,11 @@ initialBoard([['               ',' 1 ',' 2 ',' 3 ',' 4 ',' 5 '],
       ]	).
 
 		iBoard([
-      [s,s,s,s,s],
-      [s,s,s,s,s,s],
-      [s,s,s,s,s,s,s],
+      [w,w,w,w,w],
+      [s,s,s,w,s,s],
+      [s,s,s,s,w,s,w],
       [s,s,s,s,w,w,s,s],
-      [s,s,s,w,w,w,w,s,s],
+      [s,s,s,w,s,w,w,s,s],
       [s,s,s,s,b,s,s,s],
       [s,s,s,s,s,s,s],
       [s,s,s,s,s,s],

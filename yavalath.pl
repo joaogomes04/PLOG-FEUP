@@ -124,9 +124,41 @@ replace([X|Xs],N,Z,[X|Zs]):-
  N1 is N-1,
  replace(Xs,N1,Z,Zs).
  
- %%%%%%
- 
+ %%%%%%%% C = coluna da peça jogada, L = linha da peça - 4
+	
+checkVerticalDL(Board,C,L, NewList,List):-
+  (L < 10)->(
+	(L < 5) -> (
+	
+	findInBoard(Board,C,L,Piece)->(
+	append(NewList,[Piece],List1),
+	L1 is L+1,
+	checkVerticalDL(Board,C,L1,List1, List));List = NewList
+);
+(	findInBoard(Board,C,L,Piece)->(
+	append(NewList,[Piece],List1),
+	C1 is C-1,
+	L1 is L+1,
+	checkVerticalDL(Board,C1,L1,List1,List));List = NewList
+));	List = NewList.
 
+ 
+		
+			
+ 
+ teste2:-
+	iBoard(Board),
+	displayBoard(Board),
+	checkVerticalDL(Board,5,1,List,List2),
+	checkHorizontalWin([List2],w,0,1,Result),
+	write(Result),
+	write(List2).
+ 
+ 
+ 
+ 
+ 
+ 
  
  
  
@@ -184,7 +216,7 @@ teste:-
 	teste1:-
 	testBoard(Board),
 	putPiece(Board,w,6,5,NewBoard),
-	checkHorizontalWin(NewBoard,w,0,5,Result),
+	checkHorizontalWin(NewBoard,w,0,1,Result),
 	
 	write(Result).
 	
