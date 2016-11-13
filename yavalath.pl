@@ -25,6 +25,7 @@ printGameMenu:-
 	write('-     2. Player vs. Player          -'), nl,
 	write('-     3. Player vs. Random Computer -'), nl,
   write('-     4. Player vs. Smart Computer  -'), nl,
+    write('-     5. SComputer  vs. SComputer   -'), nl,
   write('-     6. Quit                       -'), nl,
 	write('-                                   -'), nl,
 	write('-------------------------------------'), nl,
