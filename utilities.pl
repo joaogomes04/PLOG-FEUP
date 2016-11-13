@@ -1,10 +1,3 @@
-pressEnterToContinue:-
-	write('Press <Enter> to continue.'), nl,
-	waitForEnter, !.
-
-waitForEnter:-
-	get_char(_).
-
 clearConsole:-
 	clearConsole(40), !.
 
@@ -14,18 +7,19 @@ clearConsole(N):-
 	N1 is N-1,
 	clearConsole(N1).
 
+getCoordinate(X, Y) :-
+	getCode(X),
+	getInt(Y),
+	get_char(_).
+
 getChar(Input):-
 	get_char(Input),
 	get_char(_).
 
 getCode(Input):-
 	get_code(TempInput),
-	get_code(_),
-	Input is TempInput - 48.
+	Input is TempInput - 65.
 
 getInt(Input):-
 	get_code(TempInput),
-	Input is TempInput - 48.
-
-discardInputChar:-
-	get_code(_).
+	Input is TempInput - 49.
