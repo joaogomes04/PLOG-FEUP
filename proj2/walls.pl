@@ -53,14 +53,14 @@ extractvars(M, Vs) :- append(M, F), include(var, F, Vs).
 
 length_(S, M) :- length(M, S).
 
-printrow([A|Es]) :- var(A), write('.'), printrow(Es).
-printrow([p(N)|Es]) :- write(N), printrow(Es).
-printrow([1|Es]) :- write('|'), printrow(Es).
-printrow([0|Es]) :- write('-'), printrow(Es).
+printrow([A|Es]) :- var(A), write('.'), write(' '), printrow(Es).
+printrow([p(N)|Es]) :- write(N), write(' '), printrow(Es).
+printrow([1|Es]) :- write('|'), write(' '), printrow(Es).
+printrow([0|Es]) :- write('-'), write(' '), printrow(Es).
 printrow([]).
 
 printmatrix([Row|Rs]) :- printrow(Row), nl, printmatrix(Rs).
-printmatrix([]).
+printmatrix([]):- nl.
 
 matrix([[_, _, p(4), _, _, p(1)],
        [_, p(2), _, _, _, _],
