@@ -74,4 +74,5 @@ matrix([[_, _, p(4), _, _, p(1)],
 solvePuzzle(M):-
   matrix(M),
   solve(M),
-  printmatrix(M).
+  printmatrix(M),
+  write(M).
