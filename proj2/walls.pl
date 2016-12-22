@@ -33,7 +33,6 @@ constseq(L, E, N) :-
 
 constraint(L, R, U, D, N) :-
   constseq(L, 0, NL),
-  %write('mbn'),nl,
   constseq(R, 0, NR),
   constseq(U, 1, NU),
   constseq(D, 1, ND),
@@ -53,7 +52,6 @@ solve(M) :-
   domain(Vs,0,1),
   findall(X-Y-P, findPivots(M, X-Y, P), R),
   maplist(constrainpivot(M), R),
-  %write(Vs),nl,
   labeling([],Vs).
 
 extractvars(M, Vs) :- append(M, F), include(var, F, Vs).
@@ -75,8 +73,8 @@ matrix([[_, _, p(4), _, _, p(1)],
        [_, _, p(1), _, _, p(2)],
        [_, _, _, _, p(2), _],
        [p(2), _, _, p(3), _, _]]).
-	   
-%dificuldade 2 estrelas	   
+
+%dificuldade 2 estrelas
 matrix1([[_,p(2),_,_,_,p(3),_,_,_],
 [_,_,p(3),_,p(2),_,p(1),_,p(2)],
 [_,p(2),_,p(1),_,_,_,p(2),_],
@@ -87,9 +85,9 @@ matrix1([[_,p(2),_,_,_,p(3),_,_,_],
 [p(2),_,p(1),_,p(1),_,p(4),_,_],
 [_,_,_,p(3),_,_,_,p(2),_]
 ]).
-       
-	   
-%dificuldade 3 estrelas	   
+
+
+%dificuldade 3 estrelas
 matrix2([[_,p(3),_,_,_,_,p(2),_],
 [p(3),_,_,_,p(1),_,_,p(2)],
 [_,_,_,p(1),_,_,_,_],
@@ -98,9 +96,9 @@ matrix2([[_,p(3),_,_,_,_,p(2),_],
 [_,_,_,_,p(3),_,_,_],
 [p(1),_,_,p(3),_,_,_,p(4)],
 [_,p(1),_,_,_,_,p(4),_]
-]).	   
+]).
 
-%dificuldade 4 estrelas	   
+%dificuldade 4 estrelas
 matrix3([[p(5),_,_,_,p(2),_,_,_,_,p(2)],
 [_,_,p(3),_,_,_,_,p(4),_,_],
 [_,p(4),_,_,_,p(2),_,_,p(3),_],
@@ -112,8 +110,8 @@ matrix3([[p(5),_,_,_,p(2),_,_,_,_,p(2)],
 [_,_,p(4),_,_,_,_,p(2),_,_],
 [p(2),_,_,_,_,p(6),_,_,_,p(3)]
 ]).
-	   
-	   
+
+
 solvePuzzle(M):-
   matrix3(M),
   statistics(runtime, [T0|_]),
@@ -121,9 +119,6 @@ solvePuzzle(M):-
   statistics(runtime, [T1|_]),
   T is T1 - T0,
   printmatrix(M),
-  %write(M), nl,
-  
-  format('the puzzle took ~3d sec.~n', [T]),nl, fd_statistics.
+  write(M), nl,
 
-
-       
+  format('The puzzle took ~3d sec to be solved.~n', [T]),nl, fd_statistics.
