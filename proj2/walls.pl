@@ -122,7 +122,8 @@ solvePuzzle(M):-
   T is T1 - T0,
   printmatrix(M),
   %write(M), nl,
-  format('the puzzle took ~3d sec.~n', [T]),nl.
+  
+  format('the puzzle took ~3d sec.~n', [T]),nl, fd_statistics.
 
 
        
